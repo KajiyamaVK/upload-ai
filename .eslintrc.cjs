@@ -2,7 +2,6 @@ module.exports = {
   root: true,
   env: { browser: true, es2020: true },
   extends: [
-    'eslint:recommended',
     '@rocketseat/eslint-config/react',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
