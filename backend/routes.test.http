@@ -1,0 +1,46 @@
+
+GET http://localhost:4000/
+
+###
+
+# @name get-all-prompts
+GET http://localhost:4000/prompts
+
+###
+
+# @name  upload-video
+POST http://localhost:4000/videos/upload
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="example.mp3"
+Content-Type: audio/mpeg
+
+< ./example.mp3
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### 
+
+# @name video-transcript-generate
+POST http://localhost:4000/videos/transcript/70803a52-e4d6-4aad-bd19-d1facea4a30b
+Content-Type: application/json
+
+{
+  "prompt": "vida inteligente, temporal"
+}
+
+### 
+
+# @name generate-ideas
+POST http://localhost:4000/ai/generateIdeas
+Content-Type: application/json
+
+{
+  "videoId":"70803a52-e4d6-4aad-bd19-d1facea4a30b" ,
+  "template": "Gere um resumo sucinto da transcrição do vídeo do vídeo informada a seguir: '''{transcription}'''",
+  "temperature" : 0.5
+}
+
+
+
