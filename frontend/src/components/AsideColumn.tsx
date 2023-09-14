@@ -116,8 +116,6 @@ export function AsideColumn() {
 
   function handleSubmit2(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    console.log('handleSubmit2')
-    debugger
     handleSubmit(e)
   }
 
