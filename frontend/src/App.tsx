@@ -1,9 +1,8 @@
 import './index.css'
 import { Button } from '@/components/ui/button'
-import { Textarea } from './components/ui/textarea'
 import { Github } from 'lucide-react'
 import { Separator } from './components/ui/separator'
-import { AsideColumn } from './components/asideColumn'
+import { AsideColumn } from './components/AsideColumn'
 import { MainContent } from './components/MainContent'
 
 export function App() {

@@ -23,7 +23,6 @@ export async function videosRoutes(app: FastifyInstance) {
   })
   app.post('/upload', async (req, res) => {
     const data = await req.file()
-
     if (!data) {
       return res.status(400).send('No file uploaded')
     }
@@ -40,14 +39,12 @@ export async function videosRoutes(app: FastifyInstance) {
     const uploadDestination = path.resolve(__dirname, '../', '../', 'audiosTMP/', fileUploadName)
 
     await pump(data.file, fs.createWriteStream(uploadDestination))
-
     const video = await prisma.video.create({
       data: {
         name: data.filename,
         path: uploadDestination
       }
     })
-
     return {
       video
     }

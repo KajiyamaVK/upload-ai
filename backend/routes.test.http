@@ -33,12 +33,12 @@ Content-Type: application/json
 ### 
 
 # @name generate-ideas
-POST http://localhost:4000/ai/generateIdeas
+POST http://localhost:4000/ai/generateResponse
 Content-Type: application/json
 
 {
   "videoId":"70803a52-e4d6-4aad-bd19-d1facea4a30b" ,
-  "template": "Gere um resumo sucinto da transcrição do vídeo do vídeo informada a seguir: '''{transcription}'''",
+  "prompt": "Gere um resumo sucinto da transcrição do vídeo do vídeo informada a seguir: '''{transcription}'''",
   "temperature" : 0.5
 }
 
