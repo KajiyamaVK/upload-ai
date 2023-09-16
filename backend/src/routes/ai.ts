@@ -31,17 +31,26 @@ export async function aiRoutes(app: FastifyInstance) {
     }
     const wordsToChange = ['vídeo', 'video']
 
+    console.log('prompt', prompt)
+
     //replace in template if template has wordsToChange to "texto"
-    prompt = wordsToChange.reduce((acc, word) => {
-      return acc.replace(word, 'texto')
-    })
+
+    console.log('prompt2', prompt)
 
     //const promptMessage = template.replace('{transcription}', video.transcription)
     const promptMessage = `
-    Baseado no texto abaixo, responda ao meu pedido ou pergunta que virá logo depois.\n
-    Responda sempre no mesmo idioma no qual o pedido ou pergunta foi feito. Se perguntarem em inglês, responda em inglês. Se perguntarem em português, responda em português. Japonês, responda em japonês (e assim por diante)\n
-    Caso meu pedido ou pergunta não tiver relação ao texto, responda apenas "hm. Não saberei como lhe responder. Gostaria de falar com um atendente?"\n\n
-    Texto: ${video.transcription}\n\n
+    Baseado no conteúdo abaixo, que é proveniente do conteúdo de um vídeo, responda ao meu pedido ou pergunta que virá logo depois.\n
+    Responda sempre no mesmo idioma no qual o pedido ou pergunta foi feito. 
+    Se perguntarem em inglês, responda em inglês. Se perguntarem em português, responda em português. Japonês, responda em japonês (e assim por diante)\n\n
+
+    Por exemplo, se o conteúdo abaixo for em português e o pedido ou pergunta for em inglês, responda em inglês.\n\n
+
+    Caso meu pedido ou pergunta não tiver relação ao texto, responda apenas "hm. Não saberei como lhe responder. Gostaria de falar com um atendente?" (No respectivo idioma do pedido/pergunta)\n\n
+
+    Lembre-se - o conteúdo é proveniente de um vídeo que foi transformado em texto, portanto, a pergunta pode ser direcionada à palavra "vídeo". Sempre se refira ao conteúdo como "conteúdo" - mesmo que eu chame o conteúdo de "vídeo" ou "texto"\n\n
+    
+
+    Conteúdo: '''${video.transcription}'''\n\n
 
     Pedido / Pergunta : ${prompt}
 

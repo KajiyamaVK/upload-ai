@@ -1,6 +1,8 @@
 import { useCompletion } from 'ai/react'
 import { ReactNode, createContext, useRef, useState } from 'react'
 
+type statusType = 'idle' | 'converting' | 'uploading' | 'generating' | 'success'
+
 interface IGeneralContext {
   videoFile: File | null
   setVideoFile: React.Dispatch<React.SetStateAction<File | null>>
@@ -20,6 +22,8 @@ interface IGeneralContext {
   input: string
   setInput: React.Dispatch<React.SetStateAction<string>>
   completion: string
+  status: statusType
+  setStatus: React.Dispatch<React.SetStateAction<statusType>>
 }
 
 export const GeneralContext = createContext<IGeneralContext>(
@@ -33,6 +37,7 @@ export const GeneralProvider = ({ children }: { children: ReactNode }) => {
   const [selectedTemplate, setSelectedTemplate] = useState<string>('')
   const [aiResponse, setAiResponse] = useState<string>('')
   const promptInputRef = useRef<HTMLTextAreaElement>(null)
+  const [status, setStatus] = useState<statusType>('idle')
 
   const {
     handleSubmit,
@@ -72,6 +77,8 @@ export const GeneralProvider = ({ children }: { children: ReactNode }) => {
         input,
         setInput,
         completion,
+        status,
+        setStatus,
       }}
     >
       {children}

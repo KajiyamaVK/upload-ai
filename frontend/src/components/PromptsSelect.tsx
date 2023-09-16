@@ -27,11 +27,11 @@ export function PromptsSelect() {
   }, [])
 
   return (
-    <div>
-      <Label>Prompt</Label>
+    <div className="w-80 h-fit">
+      <Label>Prompts Template</Label>
       <Select onValueChange={setInput}>
         <SelectTrigger>
-          <SelectValue placeholder="Select a prompt" />
+          <SelectValue placeholder="Select a prompt (optional)" />
         </SelectTrigger>
         <SelectContent>
           {prompts?.map((prompt) => (

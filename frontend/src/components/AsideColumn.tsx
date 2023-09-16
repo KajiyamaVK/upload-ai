@@ -1,48 +1,22 @@
-import { Upload, Wand2 } from 'lucide-react'
+import { Upload } from 'lucide-react'
 import { TranscriptionPrompt } from './TranscriptionPrompt'
 import { VideoInput } from './VideoInput'
 import { Button } from './ui/button'
 import { Separator } from './ui/separator'
-import { PromptsSelect } from './PromptsSelect'
 import { ModelSelect } from './ModelSelect'
 import { TemperatureSlider } from './TemperatureSlider'
-import { FormEvent, useContext, useEffect, useState } from 'react'
+import { FormEvent, useContext } from 'react'
 import { getFFmpeg } from '@/lib/ffmpeg'
 import { fetchFile } from '@ffmpeg/util'
 import { GeneralContext } from '@/generalContext'
 import { api } from '@/lib/axios'
-import { Toaster } from './ui/toaster'
-import { useToast } from './ui/use-toast'
-
-type statusType = 'idle' | 'converting' | 'uploading' | 'generating' | 'success'
+import { LoadingSpinner } from './ui/loadingSpinner'
 
 export function AsideColumn() {
-  const { videoFile, promptInputRef, setVideoId, handleSubmit, isLoading } =
+  const { videoFile, promptInputRef, setVideoId, status, setStatus } =
     useContext(GeneralContext)
-  const [status, setStatus] = useState<statusType>('idle')
-  const { toast } = useToast()
-  useEffect(() => {
-    if (status === 'success') {
-      showToaster()
-    }
-  }, [status])
-
-  function showToaster() {
-    toast({
-      title: 'Upload successful',
-      description: 'Your video is now available to be used in the prompt.',
-    })
-  }
 
   const isUploadButtonDisabled = status !== 'idle' && status !== 'success'
-
-  const loadingSpinner = (
-    <div
-      className={`animate-spin flex rounded-full w-6 h-6 bg-gradient-to-tr from-indigo-500 to-black mr-2`}
-    >
-      <div className="h-4 w-4 rounded-full m-auto bg-blue-600"></div>
-    </div>
-  )
 
   async function convertVideoToAudio(video: File) {
     console.log('Convert Started')
@@ -90,7 +64,6 @@ export function AsideColumn() {
   }
   async function handleUploadVideo(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    console.log('videoFile')
     const prompt = promptInputRef.current?.value
     if (!videoFile) return
 
@@ -114,11 +87,6 @@ export function AsideColumn() {
     setStatus('success')
   }
 
-  function handleSubmit2(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    handleSubmit(e)
-  }
-
   return (
     <div>
       <aside className="w-80 space-y-6">
@@ -133,30 +101,14 @@ export function AsideColumn() {
             type="submit"
             disabled={isUploadButtonDisabled}
           >
-            {isUploadButtonDisabled && loadingSpinner}
+            {isUploadButtonDisabled && <LoadingSpinner />}
             {isUploadButtonDisabled ? status : `Upload new video`}
             <Upload className="w-4 h-4 ml-2" />
           </Button>
         </form>
         <Separator />
-        <form className="space-y-6" onSubmit={handleSubmit2}>
-          <div className="space-y-2">
-            <PromptsSelect />
-          </div>
-          <div className="space-y-2">
-            <ModelSelect />
-          </div>
 
-          <Separator />
-          <TemperatureSlider />
-          <Separator />
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading && loadingSpinner}
-            {isLoading ? status : `Execute`}
-            <Wand2 className="w-4 h-4 ml-2" />
-          </Button>
-        </form>
-        <Toaster />
+        <Separator />
       </aside>
     </div>
   )

@@ -9,7 +9,7 @@ export function TemperatureSlider() {
   return (
     <div>
       <div className="space-y-4">
-        <Label>Temperature</Label>
+        <Label>Creativity</Label>
         <Slider
           min={0}
           max={1}
@@ -18,7 +18,7 @@ export function TemperatureSlider() {
           onValueChange={(value) => [setTemperature(value[0])]}
         />
         <span className="block text-xs text-muted-foreground italic leading-relaxed">
-          Higher number let the AI to be more creative but with more of errors
+          Higher number let the AI be more creative but with less accuracy
         </span>
       </div>
     </div>
