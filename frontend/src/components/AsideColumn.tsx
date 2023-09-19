@@ -1,79 +1,75 @@
 import { Upload } from 'lucide-react'
-import { TranscriptionPrompt } from './TranscriptionPrompt'
+import { KeywordsPrompt } from './KeywordsPrompt'
 import { VideoInput } from './VideoInput'
 import { Button } from './ui/button'
 import { Separator } from './ui/separator'
-import { ModelSelect } from './ModelSelect'
-import { TemperatureSlider } from './TemperatureSlider'
-import { FormEvent, useContext } from 'react'
-import { getFFmpeg } from '@/lib/ffmpeg'
-import { fetchFile } from '@ffmpeg/util'
-import { GeneralContext } from '@/generalContext'
+import { FormEvent, useContext, useState } from 'react'
+import { GeneralContext } from '@/contexts/generalContext'
 import { api } from '@/lib/axios'
-import { LoadingSpinner } from './ui/loadingSpinner'
+import { LoadingSpinner } from './LoadingSpinner'
+import { convertVideoToAudio } from '@/utils/convertVideoToAudio'
+import { DialogBoxContext } from '@/contexts/dialogBoxContext'
+import { highlightFieldWithError } from '@/utils/highlightFieldWithError'
 
 export function AsideColumn() {
   const { videoFile, promptInputRef, setVideoId, status, setStatus } =
     useContext(GeneralContext)
 
-  const isUploadButtonDisabled = status !== 'idle' && status !== 'success'
+  const { showDialogBox, dialogBox } = useContext(DialogBoxContext)
 
-  async function convertVideoToAudio(video: File) {
-    console.log('Convert Started')
-    const ffmpeg = await getFFmpeg()
-    await ffmpeg.writeFile('input.mp4', await fetchFile(video))
-
-    // If you want to see the logs, uncomment the line below
-    // ffmpeg.on('log', (msg) => console.log(msg))
-
-    ffmpeg.on('progress', (progress) => {
-      console.log(
-        'Convert Progress: ' + Math.round(progress.progress * 100) + '%',
-      )
-    })
-
-    const inputFilePath = 'input.mp4'
-    const outputFilePath = 'output.mp3'
-    const audioBitrate = '20k'
-
-    const ffmpegArgs = [
-      '-i',
-      inputFilePath, // input file
-      '-map',
-      '0:a', // include only audio stream
-      '-b:a',
-      audioBitrate, // set audio bitrate
-      '-vn', // exclude video stream
-      '-acodec',
-      'libmp3lame', // set audio codec
-      outputFilePath, // output file
-    ]
-
-    await ffmpeg.exec(ffmpegArgs)
-
-    const data = await ffmpeg.readFile(outputFilePath)
-
-    const audioFileBlob = new Blob([data], { type: 'audio/mpeg' })
-    const audioFile = new File([audioFileBlob], 'output.mp3', {
-      type: 'audio/mpeg',
-    })
-
-    console.log('Convert Finished')
-
-    return audioFile
-  }
   async function handleUploadVideo(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const prompt = promptInputRef.current?.value
-    if (!videoFile) return
+
+    if (status === 'success') {
+      showDialogBox({
+        title: 'Already uploaded',
+        description:
+          'The video has already been uploaded. If you want to upload a new video, please select a new file.',
+        open: true,
+        action: 'Ok',
+        isError: true,
+        onAction: () => {
+          showDialogBox({
+            ...dialogBox,
+            open: false,
+            onAction: () => {
+              showDialogBox({
+                ...dialogBox,
+                open: false,
+              })
+              highlightFieldWithError('video', true)
+            },
+          })
+        },
+      })
+      return
+    } else if (!videoFile) {
+      showDialogBox({
+        title: 'No video selected',
+        description: 'Select a video to upload.',
+        open: true,
+        action: 'Ok',
+        isError: true,
+        onAction: () => {
+          showDialogBox({
+            ...dialogBox,
+            open: false,
+          })
+          highlightFieldWithError('video', true)
+        },
+      })
+      return
+    }
 
     setStatus('converting')
+    console.log('converting video to audio')
     const audioFile = await convertVideoToAudio(videoFile)
 
     const data = new FormData()
 
     data.append('file', audioFile)
-
+    console.log('uploading audio file')
     setStatus('uploading')
     const response = await api.post(`/videos/upload`, data)
 
@@ -87,6 +83,36 @@ export function AsideColumn() {
     setStatus('success')
   }
 
+  let uploadButtonLabel = ''
+  let isHidden = false
+
+  switch (status) {
+    case 'idle':
+      uploadButtonLabel = 'Upload new video'
+      isHidden = true
+      break
+    case 'readyForUpload':
+      uploadButtonLabel = 'Upload new video'
+      isHidden = true
+      break
+    case 'converting':
+      uploadButtonLabel = 'Converting...'
+      isHidden = false
+      break
+    case 'uploading':
+      uploadButtonLabel = 'Uploading...'
+      isHidden = false
+      break
+    case 'generating':
+      isHidden = false
+      uploadButtonLabel = 'Generating...'
+      break
+    case 'success':
+      uploadButtonLabel = 'Success'
+      isHidden = true
+      break
+  }
+
   return (
     <div>
       <aside className="w-80 space-y-6">
@@ -95,14 +121,16 @@ export function AsideColumn() {
 
           <Separator />
 
-          <TranscriptionPrompt isDisabled={isUploadButtonDisabled} />
+          <KeywordsPrompt isDisabled={videoFile === null} />
           <Button
             className="w-full"
             type="submit"
-            disabled={isUploadButtonDisabled}
+            title='Select a video to enable the "Upload" button.'
+            id="upload-button"
+            disabled={!isHidden}
           >
-            {isUploadButtonDisabled && <LoadingSpinner />}
-            {isUploadButtonDisabled ? status : `Upload new video`}
+            <LoadingSpinner isHidden={isHidden} />
+            {uploadButtonLabel}
             <Upload className="w-4 h-4 ml-2" />
           </Button>
         </form>

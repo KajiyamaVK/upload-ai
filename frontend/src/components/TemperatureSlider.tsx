@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { Label } from './ui/label'
 import { Slider } from './ui/slider'
-import { GeneralContext } from '@/generalContext'
+import { GeneralContext } from '@/contexts/generalContext'
 
 export function TemperatureSlider() {
   const { temperature, setTemperature } = useContext(GeneralContext)

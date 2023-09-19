@@ -1,18 +1,24 @@
-import { GeneralContext } from '@/generalContext'
+import { GeneralContext } from '@/contexts/generalContext'
+import { highlightFieldWithError } from '@/utils/highlightFieldWithError'
 import { FileVideo } from 'lucide-react'
-import { ChangeEvent, useContext, useMemo, useRef, useState } from 'react'
+import { ChangeEvent, MouseEventHandler, useContext, useMemo } from 'react'
 
 export function VideoInput() {
-  const { setVideoFile, videoFile } = useContext(GeneralContext)
+  const { setVideoFile, videoFile, setStatus } = useContext(GeneralContext)
 
-  function handleFileSelected(e: ChangeEvent<HTMLInputElement>) {
-    const { files } = e.currentTarget
+  function handleClick() {
+    highlightFieldWithError('video', false)
+  }
+
+  function handleFileSelected(event: ChangeEvent<HTMLInputElement>) {
+    const { files } = event.currentTarget
 
     if (!files) return
 
     const selectedFile = files[0]
 
     setVideoFile(selectedFile)
+    setStatus('readyForUpload')
   }
 
   const previewUrl = useMemo(() => {
@@ -21,9 +27,9 @@ export function VideoInput() {
   }, [videoFile])
 
   return (
-    <div>
+    <div className={'border-2 '} id="video">
       <label
-        htmlFor="video"
+        htmlFor="videoInput"
         className="relative border flex rounded-md aspect-video cursor-pointer border-dashed text-sm flex-col gap-2 items-center justify-center text-muted-foreground hover:bg-primary/5 hover:font-bold hover:text-md object-fill overflow-hidden"
       >
         {previewUrl ? (
@@ -41,9 +47,10 @@ export function VideoInput() {
       </label>
       <input
         type="file"
-        id="video"
         accept="video/mp4"
         className="sr-only"
+        id="videoInput"
+        onClick={(e) => handleClick()}
         onChange={(e) => handleFileSelected(e)}
       />
     </div>

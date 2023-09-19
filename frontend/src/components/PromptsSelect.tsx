@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from './ui/select'
 import { api } from '@/lib/axios'
-import { GeneralContext } from '@/generalContext'
+import { GeneralContext } from '@/contexts/generalContext'
 
 interface IPrompt {
   id: string
