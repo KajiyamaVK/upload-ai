@@ -21,12 +21,13 @@ In this repository, you'll find two folders: one for the frontend and one for th
 
 
 For the frontend we used...
-
 <div>
-  <img src='/frontend/public/Stacks/typescript.jpg' width="60px"/>
-</div>
-<div>
-  <i>Typescript</i>
+  <div>
+    <img src='/frontend/public/Stacks/typescript.jpg' width="60px"/>
+  </div>
+  <div>
+    <i>Typescript</i>
+  </div>
 </div>
 
 
