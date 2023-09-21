@@ -1,5 +1,6 @@
 
 # Upload.AI
+**Status:** Under construction
 > **Note:** The project name isn't a clickable link. Markdown can sometimes make text look like a link when we don't intend it to.
 
 Welcome to Upload.AI! This project is perfect for companies that have video content showcasing their products and/or services and are looking to create a smart chatbot.
