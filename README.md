@@ -37,5 +37,6 @@ For the backend we used...
   <img src='/frontend/public/Stacks/node.png' width="60px" style='margin-right:30px;'/>
   <img src='/frontend/public/Stacks/fastify.png' width="60px" style='margin-right:30px;'/>
   <img src='/frontend/public/Stacks/sqlite.png' width="60px" style='margin-right:30px;'/>
+  <img src='/frontend/public/Stacks/prisma.jpg' width="60px" style='margin-right:30px;'/>
 </div>
 
