@@ -22,9 +22,9 @@ In this repository, you'll find two folders: one for the frontend and one for th
 
 For the frontend we used...
 
-<div style='flex'>
+<div style='display:flex; flex-direction:column'>
   <img src='/frontend/public/Stacks/typescript.jpg' width="60px"/>
-  Typescript
+  <i>Typescript</i>
 </div>
 
 
