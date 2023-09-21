@@ -19,17 +19,22 @@ Here's the step-by-step guide to get you started:
 
 In this repository, you'll find two folders: one for the frontend and one for the backend.
 
-
+<br>
 For the frontend we used...
-<div>
-  <div>
-    <img src='/frontend/public/Stacks/typescript.jpg' width="60px"/>
-  </div>
-  <div>
-    <i>Typescript</i>
-  </div>
+<div style='display:flex'>
+  <img src='/frontend/public/Stacks/typescript.jpg' width="60px" style='margin-right:30px;'/>
+  <img src='/frontend/public/Stacks/react.jpg' width="60px" style='margin-right:30px;'/>
+  <img src='/frontend/public/Stacks/tailwind.jpg' width="60px" style='margin-right:30px;'/>
+  <img src='/frontend/public/Stacks/radix.png' width="60px" style='margin-right:30px;'/>
 </div>
 
 
+<br>
 For the backend we used...
+<div style='display:flex'>
+  <img src='/frontend/public/Stacks/typescript.jpg' width="60px" style='margin-right:30px;'/>
+  <img src='/frontend/public/Stacks/node.png' width="60px" style='margin-right:30px;'/>
+  <img src='/frontend/public/Stacks/fastify.png' width="60px" style='margin-right:30px;'/>
+  <img src='/frontend/public/Stacks/sqlite.png' width="60px" style='margin-right:30px;'/>
+</div>
 
